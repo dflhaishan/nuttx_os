@@ -20,8 +20,8 @@
  *
  ****************************************************************************/
 
-#ifndef __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_MINIMUM_H
-#define __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_MINIMUM_H
+#ifndef __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_ALIENTEK_H
+#define __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_ALIENTEK_H
 
 /****************************************************************************
  * Included Files
@@ -200,6 +200,16 @@
 
 #define BOARD_DS18B20_NBUS     2 /* Bus number of connected DS18B20 */
 #define BOARD_DS18B20_NSLAVES  1 /* Number of expected DS18B20 slaves */
+
+/* Backlight control: PB.0
+ *
+ * If CONFIG_LCD_TIM1 (and CONFIG_STM32_TIM1) is defined, PA.8 will be
+ * configured as CH1OUT for variable backlight control.  Otherwise, the
+ * following definition will be used to support a discrete backlight control.
+ */
+
+#define GPIO_LCD_BACKLIGHT (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+                             GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN0)
 
 /****************************************************************************
  * Public Function Prototypes
@@ -409,7 +419,27 @@ void stm32_selectsram(void);
  ****************************************************************************/
 
 void stm32_deselectsram(void);
+
+/****************************************************************************
+ * Name: stm32_selectlcd
+ *
+ * Description:
+ *   Initialize to the LCD
+ *
+ ****************************************************************************/
+
+void stm32_selectlcd(void);
+
+/****************************************************************************
+ * Name: stm32_deselectlcd
+ *
+ * Description:
+ *   Disable the LCD
+ *
+ ****************************************************************************/
+
+void stm32_deselectlcd(void);
 #endif
 
 #endif /* __ASSEMBLY__ */
-#endif /* __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_MINIMUM_H */
+#endif /* __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_ALIENTEK_H */

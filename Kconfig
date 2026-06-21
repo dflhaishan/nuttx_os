@@ -1406,8 +1406,8 @@ endif # DEBUG_LEDS
 
 config DEBUG_INPUT
 	bool "Input Device Debug Features"
-	default n
-	depends on INPUT
+	default y
+#	depends on INPUT
 	---help---
 		Enable input d.
 		Enable low level device debug features for the input device drivers

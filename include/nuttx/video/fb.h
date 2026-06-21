@@ -59,7 +59,7 @@
 #define FB_FMT_Y800           FB_FMT_Y8 /* BPP=8 */
 
 #define FB_ISMONO(f)          (((f) >= FB_FMT_Y1) && (f) <= FB_FMT_Y16)
-
+#define FB_FMT_MONO          FB_FMT_Y1 /* Default monochrome format */
 /* RGB video formats ********************************************************/
 
 /* Standard RGB */

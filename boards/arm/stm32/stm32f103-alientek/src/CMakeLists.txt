@@ -112,6 +112,8 @@ endif()
 if(CONFIG_STM32_FSMC)
   list(APPEND SRCS stm32_extmem.c)
   list(APPEND SRCS stm32_selectsram.c stm32_deselectsram.c)
+  list(APPEND SRCS stm32_lcd_5510.c)
+  list(APPEND SRCS stm32_selectlcd.c stm32_deselectlcd.c)
 endif()
 
 target_sources(board PRIVATE ${SRCS})
