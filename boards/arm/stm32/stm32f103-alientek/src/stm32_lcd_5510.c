@@ -101,6 +101,8 @@
 #define LCD_REG_CURSOR_Y             0x2B00
 #define LCD_REG_WRITE_GRAM           0x2C00
 #define LCD_REG_READ_GRAM            0x2E00
+#define LCD_REG_0                    0x1100
+#define LCD_REG_1                    0x2900
 
 /****************************************************************************
  * Private Types
@@ -704,13 +706,16 @@ static int stm32f103_setcontrast(struct lcd_dev_s *dev, unsigned int contrast)
 static inline void stm32f103_lcdinitialize(void)
 {
     g_lcddev.type = LCD_TYPE_AL5510;
-
+    ginfo("LCD Type: %d\n", g_lcddev.type);
     for (uint32_t i = 0; i < sizeof(lcd_cmd) / sizeof(lcd_cmd_t); i++)
     {
         LCD->address = lcd_cmd[i].cmd;
         LCD->value   = lcd_cmd[i].val;
     }
-
+    
+    LCD->address = LCD_REG_0;
+    up_mdelay(120);
+    LCD->address = LCD_REG_1;
     stm32_configgpio(GPIO_LCD_BACKLIGHT);
 }
 
