@@ -82,7 +82,7 @@
 
 /* Display Resolution */
 #  define STM32F103_XRES       480
-#  define STM32F103_YRES       800
+#  define STM32F103_YRES       480//800
 
 
 /* Color depth and format */

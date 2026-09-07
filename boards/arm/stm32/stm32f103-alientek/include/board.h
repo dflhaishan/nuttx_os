@@ -136,12 +136,12 @@
 
 /* BUTTON definitions *******************************************************/
 
-#define NUM_BUTTONS       2
+#define NUM_BUTTONS       4
 
 #define BUTTON_USER1      0
 #define BUTTON_USER2      1
-#define BUTTON_USER1_BIT  (1 << BUTTON_USER1)
-#define BUTTON_USER2_BIT  (1 << BUTTON_USER2)
+#define BUTTON_USER3      2
+#define BUTTON_USER4      3
 
 /* LED definitions **********************************************************/
 
