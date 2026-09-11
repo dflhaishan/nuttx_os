@@ -62,7 +62,7 @@ void stm32_spidev_initialize(void)
    */
 
 #ifdef CONFIG_MTD_W25
-  stm32_configgpio(FLASH_SPI1_CS);      /* FLASH chip select */
+  stm32_configgpio(FLASH_SPI2_CS);      /* FLASH chip select */
 #endif
 
 #ifdef CONFIG_CAN_MCP2515
@@ -183,10 +183,6 @@ void stm32_spi1select(struct spi_dev_s *dev, uint32_t devid,
       stm32_gpiowrite(GPIO_SDCARD_CS, !selected);
     }
 #endif
-
-#ifdef CONFIG_MTD_W25
-  stm32_gpiowrite(FLASH_SPI1_CS, !selected);
-#endif
 }
 
 uint8_t stm32_spi1status(struct spi_dev_s *dev, uint32_t devid)
@@ -215,6 +211,9 @@ uint8_t stm32_spi1status(struct spi_dev_s *dev, uint32_t devid)
 void stm32_spi2select(struct spi_dev_s *dev, uint32_t devid,
                       bool selected)
 {
+#ifdef CONFIG_MTD_W25
+  stm32_gpiowrite(FLASH_SPI2_CS, !selected);
+#endif
 }
 
 uint8_t stm32_spi2status(struct spi_dev_s *dev, uint32_t devid)

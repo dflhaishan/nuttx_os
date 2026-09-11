@@ -1,5 +1,5 @@
 /****************************************************************************
- * boards/arm/stm32/stm32f103-minimum/src/stm32_w25.c
+ * boards/arm/stm32/stm32f103-alientek/src/stm32_w25.c
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -32,7 +32,7 @@
 #include <errno.h>
 #include <debug.h>
 
-#ifdef CONFIG_STM32_SPI1
+#ifdef CONFIG_STM32_SPI2
 #  include <nuttx/spi/spi.h>
 #  include <nuttx/mtd/mtd.h>
 #  include <nuttx/fs/smart.h>
@@ -53,14 +53,14 @@
  * timer
  */
 
-#define W25_SPI_PORT 1
+#define W25_SPI_PORT 2
 
 /* Configuration ************************************************************/
 
-/* Can't support the W25 device if it SPI1 or W25 support is not enabled */
+/* Can't support the W25 device if it SPI2 or W25 support is not enabled */
 
 #define HAVE_W25  1
-#if !defined(CONFIG_STM32_SPI1) || !defined(CONFIG_MTD_W25)
+#if !defined(CONFIG_STM32_SPI2) || !defined(CONFIG_MTD_W25)
 #  undef HAVE_W25
 #endif
 
@@ -96,7 +96,7 @@ int stm32_w25initialize(int minor)
   struct mtd_dev_s *mtd;
   struct mtd_geometry_s geo;
 #if defined(CONFIG_MTD_PARTITION_NAMES)
-  const char *partname = CONFIG_STM32F103MINIMUM_FLASH_PART_NAMES;
+  const char *partname = CONFIG_STM32F103ALIENTEK_FLASH_PART_NAMES;
 #endif
 
   /* Get the SPI port */
@@ -144,14 +144,14 @@ int stm32_w25initialize(int minor)
       return ret;
     }
 
-#ifdef CONFIG_STM32F103MINIMUM_FLASH_PART
+#ifdef CONFIG_STM32F103ALIENTEK_FLASH_PART
     {
       int partno;
       int partsize;
       int partoffset;
       int partszbytes;
       int erasesize;
-      const char *partstring = CONFIG_STM32F103MINIMUM_FLASH_PART_LIST;
+      const char *partstring = CONFIG_STM32F103ALIENTEK_FLASH_PART_LIST;
       const char *ptr;
       struct mtd_dev_s *mtd_part;
       char  partref[16];
@@ -194,10 +194,10 @@ int stm32_w25initialize(int minor)
           mtd_part = mtd_partition(mtd, partoffset, partszbytes / erasesize);
           partoffset += partszbytes / erasesize;
 
-#ifdef CONFIG_STM32F103MINIMUM_FLASH_CONFIG_PART
+#ifdef CONFIG_STM32F103ALIENTEK_FLASH_CONFIG_PART
           /* Test if this is the config partition */
 
-          if (CONFIG_STM32F103MINIMUM_FLASH_CONFIG_PART_NUMBER == partno)
+          if (CONFIG_STM32F103ALIENTEK_FLASH_CONFIG_PART_NUMBER == partno)
             {
               /* Register the partition as the config device */
 
@@ -212,7 +212,7 @@ int stm32_w25initialize(int minor)
 
 #if defined(CONFIG_MTD_SMART) && defined(CONFIG_FS_SMARTFS)
               snprintf(partref, sizeof(partref), "p%d", partno);
-              smart_initialize(CONFIG_STM32F103MINIMUM_FLASH_MINOR,
+              smart_initialize(CONFIG_STM32F103ALIENTEK_FLASH_MINOR,
                                mtd_part, partref);
 #endif
             }
@@ -265,13 +265,13 @@ int stm32_w25initialize(int minor)
           partno++;
         }
     }
-#else /* CONFIG_STM32F103MINIMUM_FLASH_PART */
+#else /* CONFIG_STM32F103ALIENTEK_FLASH_PART */
 
   /* Configure the device with no partition support */
 
-  smart_initialize(CONFIG_STM32F103MINIMUM_FLASH_MINOR, mtd, NULL);
+  smart_initialize(CONFIG_STM32F103ALIENTEK_FLASH_MINOR, mtd, NULL);
 
-#endif /* CONFIG_STM32F103MINIMUM_FLASH_PART */
+#endif /* CONFIG_STM32F103ALIENTEK_FLASH_PART */
 #endif /* CONFIG_FS_SMARTFS */
 #endif /* HAVE_W25 */
 
