@@ -116,6 +116,11 @@ if(CONFIG_STM32_FSMC)
   list(APPEND SRCS stm32_selectlcd.c stm32_deselectlcd.c)
 endif()
 
+if(CONFIG_ETC_ROMFS)
+  add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rc.sysinit
+                    ${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rcS)
+endif()
+
 target_sources(board PRIVATE ${SRCS})
 
 set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/ld.script")

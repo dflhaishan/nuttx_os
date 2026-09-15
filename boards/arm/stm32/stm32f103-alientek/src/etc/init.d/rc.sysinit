@@ -1,0 +1,1 @@
+mount -t smartfs /dev/smart0 /mnt/smart
