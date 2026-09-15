@@ -22,7 +22,7 @@
 
 include $(TOPDIR)/Make.defs
 
-CSRCS = stm32_boot.c stm32_bringup.c stm32_spi.c
+CSRCS = stm32_boot.c stm32_bringup.c stm32_spi.c generated_symtab.c
 
 ifeq ($(CONFIG_BOARDCTL),y)
   CSRCS += stm32_appinit.c
@@ -109,6 +109,15 @@ endif
 
 ifeq ($(CONFIG_USBMSC),y)
 CSRCS += stm32_usbmsc.c
+endif
+
+ifeq ($(CONFIG_STM32_FSMC),y)
+CSRCS += stm32_extmem.c
+CSRCS += stm32_selectsram.c
+CSRCS += stm32_deselectsram.c
+CSRCS += stm32_lcd_5510.c
+CSRCS += stm32_selectlcd.c
+CSRCS += stm32_deselectlcd.c
 endif
 
 DEPPATH += --dep-path board

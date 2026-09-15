@@ -20,7 +20,7 @@
 #
 # ##############################################################################
 
-set(SRCS stm32_boot.c stm32_bringup.c stm32_spi.c)
+set(SRCS stm32_boot.c stm32_bringup.c stm32_spi.c generated_symtab.c)
 
 if(CONFIG_BOARDCTL)
   list(APPEND SRCS stm32_appinit.c)
