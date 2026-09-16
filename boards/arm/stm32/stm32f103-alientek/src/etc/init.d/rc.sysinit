@@ -1,1 +1,3 @@
 mount -t tmpfs /tmp
+
+mount -t vfat /dev/mtdblock0 /mnt/mtd0
