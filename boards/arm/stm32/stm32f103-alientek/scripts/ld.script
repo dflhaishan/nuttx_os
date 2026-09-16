@@ -52,6 +52,7 @@ SECTIONS
         *(.got)
         *(.gcc_except_table)
         *(.gnu.linkonce.r.*)
+        KEEP(*(.text.lv_screen_active))
         _etext = ABSOLUTE(.);
     } > flash
 
