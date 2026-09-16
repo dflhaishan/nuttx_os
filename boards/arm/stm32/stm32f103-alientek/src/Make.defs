@@ -22,7 +22,7 @@
 
 include $(TOPDIR)/Make.defs
 
-CSRCS = stm32_boot.c stm32_bringup.c stm32_spi.c generated_symtab.c
+CSRCS = stm32_boot.c stm32_bringup.c stm32_spi.c
 
 ifeq ($(CONFIG_BOARDCTL),y)
   CSRCS += stm32_appinit.c
@@ -42,7 +42,7 @@ else
 endif
 
 ifeq ($(CONFIG_ADC),y)
-CSRCS +=  stm32_adc.c
+  CSRCS +=  stm32_adc.c
 endif
 
 ifeq ($(CONFIG_DEV_GPIO),y)
@@ -75,7 +75,7 @@ endif
 
 ifeq ($(CONFIG_MTD_AT24XX),y)
 ifeq ($(CONFIG_STM32_I2C1),y)
-CSRCS += stm32_at24.c
+  CSRCS += stm32_at24.c
 endif
 endif
 
@@ -92,7 +92,7 @@ ifeq ($(CONFIG_INPUT_NUNCHUCK),y)
 endif
 
 ifeq ($(CONFIG_LCD_SSD1306_I2C),y)
-CSRCS += stm32_lcd_ssd1306.c
+  CSRCS += stm32_lcd_ssd1306.c
 endif
 
 ifeq ($(CONFIG_LCD_ST7567),y)
@@ -108,20 +108,24 @@ ifeq ($(CONFIG_USBDEV),y)
 endif
 
 ifeq ($(CONFIG_USBMSC),y)
-CSRCS += stm32_usbmsc.c
+  CSRCS += stm32_usbmsc.c
 endif
 
 ifeq ($(CONFIG_STM32_FSMC),y)
-CSRCS += stm32_extmem.c
-CSRCS += stm32_selectsram.c
-CSRCS += stm32_deselectsram.c
-CSRCS += stm32_lcd_5510.c
-CSRCS += stm32_selectlcd.c
-CSRCS += stm32_deselectlcd.c
+  CSRCS += stm32_extmem.c
+  CSRCS += stm32_selectsram.c
+  CSRCS += stm32_deselectsram.c
+  CSRCS += stm32_lcd_5510.c
+  CSRCS += stm32_selectlcd.c
+  CSRCS += stm32_deselectlcd.c
 endif
 
 ifeq ($(CONFIG_ETC_ROMFS),y)
   RCSRCS = etc/init.d/rc.sysinit etc/init.d/rcS
+endif
+
+ifeq ($(CONFIG_EXECFUNCS_HAVE_SYMTAB),y)
+  CSRCS += generated_symtab.c
 endif
 
 DEPPATH += --dep-path board

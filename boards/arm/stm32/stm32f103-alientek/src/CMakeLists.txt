@@ -20,7 +20,7 @@
 #
 # ##############################################################################
 
-set(SRCS stm32_boot.c stm32_bringup.c stm32_spi.c generated_symtab.c)
+set(SRCS stm32_boot.c stm32_bringup.c stm32_spi.c)
 
 if(CONFIG_BOARDCTL)
   list(APPEND SRCS stm32_appinit.c)
@@ -119,6 +119,10 @@ endif()
 if(CONFIG_ETC_ROMFS)
   add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rc.sysinit
                     ${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rcS)
+endif()
+
+if(CONFIG_EXECFUNCS_HAVE_SYMTAB)
+  list(APPEND SRCS generated_symtab.c)
 endif()
 
 target_sources(board PRIVATE ${SRCS})
