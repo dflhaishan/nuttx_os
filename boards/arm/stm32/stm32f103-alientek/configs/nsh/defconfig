@@ -22,7 +22,7 @@ CONFIG_HOST_LINUX=y
 #
 # Build Configuration
 #
-CONFIG_APPS_DIR="/home/jhs/nuttx/nuttx-apps"
+CONFIG_APPS_DIR="../nuttx-apps"
 CONFIG_BASE_DEFCONFIG=""
 CONFIG_MODULES=y
 CONFIG_BUILD_FLAT=y
