@@ -578,5 +578,19 @@ int stm32_bringup(void)
   usbdev_adb_initialize();
 #endif
 
+#ifdef CONFIG_LCD_DEV
+  ret = board_lcd_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: board_lcd_initialize() failed: %d\n", ret);
+    }
+
+  ret = lcddev_register(0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
+    }
+#endif
+
   return ret;
 }

@@ -28,4 +28,3 @@
 
 echo "rcS file is called!"
 adbd &
-/mnt/mtd0/lv &

@@ -82,7 +82,7 @@
 
 /* Display Resolution */
 #  define STM32F103_XRES       480
-#  define STM32F103_YRES       480//800
+#  define STM32F103_YRES       800
 
 
 /* Color depth and format */
@@ -754,7 +754,8 @@ int board_lcd_initialize(void)
 
   /* Turn the backlight off */
 
-  stm32f103_poweroff();
+//   stm32f103_poweroff();
+    stm32_gpiowrite(GPIO_LCD_BACKLIGHT, true);
   return OK;
 }
 
