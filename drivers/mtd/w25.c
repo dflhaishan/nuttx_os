@@ -973,7 +973,7 @@ static FAR uint8_t *w25_cacheread(struct w25_dev_s *priv, off_t sector)
 
   shift   = W25_SECTOR_SHIFT - W25_SECTOR512_SHIFT;
   esectno = sector >> shift;
-  w25_finfo("sector: %ld esectno: %d shift=%d\n", sector, esectno, shift);
+  w25_finfo("sector: %ld esectno: %ld shift=%d\n", sector, esectno, shift);
 
   /* Check if the requested erase block is already in the cache */
 
@@ -1032,7 +1032,7 @@ static void w25_cacheerase(struct w25_dev_s *priv, off_t sector)
   if (!IS_ERASED(priv))
     {
       off_t esectno  = sector >> (W25_SECTOR_SHIFT - W25_SECTOR512_SHIFT);
-      w25_finfo("sector: %ld esectno: %d\n", sector, esectno);
+      w25_finfo("sector: %ld esectno: %ld\n", sector, esectno);
 
       w25_sectorerase(priv, esectno);
       SET_ERASED(priv);
@@ -1077,7 +1077,7 @@ static void w25_cachewrite(FAR struct w25_dev_s *priv,
         {
           off_t esectno  = sector >>
                            (W25_SECTOR_SHIFT - W25_SECTOR512_SHIFT);
-          w25_finfo("sector: %ld esectno: %d\n", sector, esectno);
+          w25_finfo("sector: %ld esectno: %ld\n", sector, esectno);
 
           w25_sectorerase(priv, esectno);
           SET_ERASED(priv);

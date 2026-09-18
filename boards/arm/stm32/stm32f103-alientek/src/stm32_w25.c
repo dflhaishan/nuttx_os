@@ -94,7 +94,9 @@ int stm32_w25initialize(int minor)
 #ifdef HAVE_W25
   struct spi_dev_s *spi;
   struct mtd_dev_s *mtd;
+#ifdef CONFIG_FS_SMARTFS
   struct mtd_geometry_s geo;
+#endif
 #if defined(CONFIG_MTD_PARTITION_NAMES)
   const char *partname = CONFIG_STM32F103ALIENTEK_FLASH_PART_NAMES;
 #endif

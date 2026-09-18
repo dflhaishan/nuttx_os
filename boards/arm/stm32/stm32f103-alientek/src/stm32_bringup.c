@@ -149,6 +149,10 @@
 #include "stm32_i2c.h"
 #endif
 
+#ifdef CONFIG_LCD_DEV
+#include <nuttx/lcd/lcd_dev.h>
+#endif
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
