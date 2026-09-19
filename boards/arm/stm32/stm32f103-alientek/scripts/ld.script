@@ -45,7 +45,6 @@ SECTIONS
         *(.text .text.*)
         *(.fixup)
         *(.gnu.warning)
-        *(.rodata .rodata.*)
         *(.gnu.linkonce.t.*)
         *(.glue_7)
         *(.glue_7t)
@@ -54,6 +53,13 @@ SECTIONS
         *(.gnu.linkonce.r.*)
         KEEP(*(.text.lv_*))
         _etext = ABSOLUTE(.);
+    } > flash
+
+    .rodata : ALIGN(4) {
+        _srodata = ABSOLUTE(.);
+        *(.rodata .rodata.*)
+        *(.gnu.linkonce.r.*)
+        _erodata = ABSOLUTE(.);
     } > flash
 
     .init_section : ALIGN(4) {
