@@ -113,8 +113,11 @@ SECTIONS
         _ebss = ABSOLUTE(.);
     } > sram
 
-    .my_external_ram : {
-        *(.my_external_ram)
+    .heap (NOLOAD) : ALIGN(4) {
+        . = . + 0xE7000;   /* 1024KB-100KB，根据你的 ext_sram 实际大小调整 */
+        _sheap = ABSOLUTE(.);
+        . = . + 0x19000;   /* 100KB，根据你的 ext_sram 实际大小调整 */
+        _eheap = ABSOLUTE(.);
     } > ext_sram
 
     /* Stabs debugging sections. */

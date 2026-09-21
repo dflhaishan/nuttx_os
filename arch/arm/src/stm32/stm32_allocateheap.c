@@ -697,10 +697,11 @@ void up_allocate_heap(void **heap_start, size_t *heap_size)
 #else
 
   /* Return the heap settings */
-
+  extern uint8_t _sheap;
+  extern uint8_t _eheap;
   board_autoled_on(LED_HEAPALLOCATE);
-  *heap_start = (void *)g_idle_topstack;
-  *heap_size  = SRAM1_END - g_idle_topstack;
+  *heap_start = (FAR void *)&_sheap;
+  *heap_size  = (size_t)((uintptr_t)&_eheap - (uintptr_t)&_sheap);
 
   /* Colorize the heap for debug */
 
