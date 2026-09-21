@@ -26,5 +26,5 @@
  * It should startup some application and other system service.
  */
 
-echo "rcS file is called!"
+/* echo "rcS file is called!" */
 adbd &
