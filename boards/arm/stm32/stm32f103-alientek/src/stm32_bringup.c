@@ -596,5 +596,15 @@ int stm32_bringup(void)
     }
 #endif
 
+#ifdef CONFIG_AUDIO
+  /* Configure the Audio sub-system if enabled and bind it to SPI 1 */
+
+  ret = stm32_vs1053initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: stm32_vs1053initialize() failed: %d\n", ret);
+    }
+#endif
+
   return ret;
 }

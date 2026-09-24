@@ -125,6 +125,10 @@ if(CONFIG_EXECFUNCS_HAVE_SYMTAB)
   list(APPEND SRCS generated_symtab.c)
 endif()
 
+if(CONFIG_AUDIO_VS1053)
+  list(APPEND SRCS stm32_vs1053.c)
+endif()
+
 target_sources(board PRIVATE ${SRCS})
 
 set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/ld.script")

@@ -96,6 +96,11 @@ void stm32_spidev_initialize(void)
 #ifdef CONFIG_MMCSD_SPI
   stm32_configgpio(GPIO_SDCARD_CS);           /* SD/MMC Card chip select */
 #endif
+
+#ifdef CONFIG_AUDIO_VS1053
+  stm32_configgpio(GPIO_CS_MP3_DATA); /* MP3 codec chip select for DATA */
+  stm32_configgpio(GPIO_CS_MP3_CMD);  /* MP3 codec chip select for CMD */
+#endif
 }
 
 /****************************************************************************
@@ -181,6 +186,17 @@ void stm32_spi1select(struct spi_dev_s *dev, uint32_t devid,
   if (devid == SPIDEV_MMCSD(0))
     {
       stm32_gpiowrite(GPIO_SDCARD_CS, !selected);
+    }
+#endif
+
+#if defined(CONFIG_AUDIO_VS1053)
+  if (devid == SPIDEV_AUDIO_DATA(0))
+    {
+      stm32_gpiowrite(GPIO_CS_MP3_DATA, !selected);
+    }
+  else if (devid == SPIDEV_AUDIO_CTRL(0))
+    {
+      stm32_gpiowrite(GPIO_CS_MP3_CMD, !selected);
     }
 #endif
 }

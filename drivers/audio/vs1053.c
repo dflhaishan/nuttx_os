@@ -551,6 +551,52 @@ static void vs1053_setbass(FAR struct vs1053_struct_s *dev)
 }
 #endif /* CONFIG_AUDIO_EXCLUDE_TONE */
 
+static void vs1053_setgpio(FAR struct vs1053_struct_s *dev, uint8_t gpio, bool sta)
+{
+  FAR struct spi_dev_s *spi = dev->spi;
+  uint8_t  timeout = 200;
+  // supported gpio is 0 to 7
+  if (gpio > 7)
+  {
+    return;
+  }
+
+  /* Lock the SPI bus to get exclsive access to the chip. */
+
+  vs1053_spi_lock(spi, dev->spi_freq);
+
+  vs1053_writereg(dev, VS1053_SCI_WRAMADDR, VS1053_GPIO_ADDR);
+  while (!dev->hw_lower->read_dreq(dev->hw_lower) && timeout)
+    {
+      nxsched_usleep(1000);
+      timeout--;
+    }
+
+  vs1053_writereg(dev, VS1053_SCI_WRAM, 1 << gpio);
+  while (!dev->hw_lower->read_dreq(dev->hw_lower) && timeout)
+    {
+      nxsched_usleep(1000);
+      timeout--;
+    }
+  // VS1053_GPIO_ADDR + 1 : input
+  // VS1053_GPIO_ADDR + 2 : output
+  vs1053_writereg(dev, VS1053_SCI_WRAMADDR, VS1053_GPIO_ADDR + 2);
+  while (!dev->hw_lower->read_dreq(dev->hw_lower) && timeout)
+    {
+      nxsched_usleep(1000);
+      timeout--;
+    }
+
+  vs1053_writereg(dev, VS1053_SCI_WRAM, sta << gpio);
+  while (!dev->hw_lower->read_dreq(dev->hw_lower) && timeout)
+    {
+      nxsched_usleep(1000);
+      timeout--;
+    }
+
+  vs1053_spi_unlock(spi);
+}
+
 /****************************************************************************
  * Name: vs1053_getcaps
  *
@@ -829,6 +875,10 @@ static int vs1053_configure(FAR struct audio_lowerhalf_s *lower,
                 }
 
               vs1053_setbass(dev);
+
+              audinfo("config output to spk\n");
+              // gpio 4 is selected for speaker or earphone, true for speaker
+              vs1053_setgpio(dev, 4, true);
 
               break;
 

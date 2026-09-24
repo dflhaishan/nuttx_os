@@ -157,6 +157,11 @@
 #define STM32_LCD_CD      (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
                            GPIO_OUTPUT_SET|GPIO_PORTA|GPIO_PIN2)
 
+#define GPIO_CS_MP3_DATA (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+                         GPIO_OUTPUT_SET|GPIO_PORTF|GPIO_PIN6)
+#define GPIO_CS_MP3_CMD (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+                         GPIO_OUTPUT_SET|GPIO_PORTF|GPIO_PIN7)
+
 /* PWM Configuration */
 
 #define STM32F103MINIMUM_PWMTIMER   3
@@ -215,6 +220,14 @@
 
 #define GPIO_LCD_BACKLIGHT (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
                              GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN0)
+
+                             /* MP3 Codec control pins */
+
+#define GPIO_VS1053_RST (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+                         GPIO_OUTPUT_SET|GPIO_PORTE|GPIO_PIN6)
+#define GPIO_VS1053_DREQ    (GPIO_INPUT|GPIO_CNF_INPULLUP|GPIO_MODE_INPUT|\
+                           GPIO_EXTI|GPIO_PORTC|GPIO_PIN13)
+#define GPIO_VS1053_DREQ_IRQ  STM32_IRQ_EXTI1510
 
 /****************************************************************************
  * Public Function Prototypes
@@ -444,6 +457,18 @@ void stm32_selectlcd(void);
  ****************************************************************************/
 
 void stm32_deselectlcd(void);
+#endif
+
+/****************************************************************************
+ * Name:  up_vs1053initialize
+ *
+ * Description:
+ *   Initialize the VS1053 Audio CODEC hardware.
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_AUDIO_VS1053
+int stm32_vs1053initialize(void);
 #endif
 
 #endif /* __ASSEMBLY__ */

@@ -128,6 +128,10 @@ ifeq ($(CONFIG_EXECFUNCS_HAVE_SYMTAB),y)
   CSRCS += generated_symtab.c
 endif
 
+ifeq ($(CONFIG_AUDIO_VS1053),y)
+  CSRCS += stm32_vs1053.c
+endif()
+
 DEPPATH += --dep-path board
 VPATH += :board
 CFLAGS += ${INCDIR_PREFIX}$(TOPDIR)$(DELIM)arch$(DELIM)$(CONFIG_ARCH)$(DELIM)src$(DELIM)board$(DELIM)board
