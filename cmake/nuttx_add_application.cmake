@@ -69,6 +69,22 @@ define_property(
 #     DEPENDS nshlib
 #     MODULE ${CONFIG_EXAMPLES_TEST})
 # ~~~
+function(target_add_symtab target)
+    add_custom_command(
+        TARGET ${target} POST_BUILD
+        COMMAND sh -c "cat '${CMAKE_BINARY_DIR}/System.map' | sed -e 's/\\r//g' > System.map"
+        COMMAND sh -c "'${NUTTX_DIR}/tools/mkdefines.sh' System.map '${target}' > defines.ld"
+        COMMAND ${CMAKE_LINKER}
+                $<TARGET_PROPERTY:nuttx,NUTTX_ELF_APP_LINK_OPTIONS>
+                -T defines.ld
+                -o ${target}_tmp ${target}
+        COMMAND ${CMAKE_STRIP} --strip-unneeded ${target}_tmp
+        COMMAND ${CMAKE_COMMAND} -E rm -f ${target}
+        COMMAND ${CMAKE_COMMAND} -E rename ${target}_tmp ${target}
+        COMMAND_EXPAND_LISTS
+        VERBATIM
+    )
+endfunction()
 
 function(nuttx_add_application)
 
@@ -126,6 +142,8 @@ function(nuttx_add_application)
         target_link_options(
           ${TARGET} PRIVATE
           $<GENEX_EVAL:$<TARGET_PROPERTY:nuttx,NUTTX_ELF_APP_LINK_OPTIONS>>)
+        add_dependencies(${TARGET} nuttx)
+        target_add_symtab(${TARGET})
       endif()
 
       # easy access to final ELF, regardless of how it was created

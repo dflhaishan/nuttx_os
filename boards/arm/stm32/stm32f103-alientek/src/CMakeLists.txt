@@ -132,3 +132,27 @@ endif()
 target_sources(board PRIVATE ${SRCS})
 
 set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/ld.script")
+
+# Loadable module definitions
+
+set_property(
+  TARGET nuttx
+  APPEND
+  PROPERTY NUTTX_ELF_MODULE_COMPILE_OPTIONS -mlong-calls)
+set_property(
+  TARGET nuttx
+  APPEND
+  PROPERTY NUTTX_ELF_MODULE_LINK_OPTIONS -r -e module_initialize -T
+           ${NUTTX_DIR}/libs/libc/elf/gnu-elf.ld)
+
+# ELF module definitions
+
+set_property(
+  TARGET nuttx
+  APPEND
+  PROPERTY NUTTX_ELF_APP_COMPILE_OPTIONS -mlong-calls)
+set_property(
+  TARGET nuttx
+  APPEND
+  PROPERTY NUTTX_ELF_APP_LINK_OPTIONS -r -e main
+           -T${NUTTX_BOARD_DIR}/scripts/gnu-elf.ld)

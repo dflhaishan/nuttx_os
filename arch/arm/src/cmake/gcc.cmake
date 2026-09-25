@@ -32,6 +32,7 @@ set(CMAKE_CXX_COMPILER_TARGET ${TOOLCHAIN_PREFIX})
 
 set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
 set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
+set(CMAKE_C_ELF_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++)
 set(CMAKE_PREPROCESSOR ${TOOLCHAIN_PREFIX}-gcc -E -P -x c)
 set(CMAKE_STRIP ${TOOLCHAIN_PREFIX}-strip --strip-unneeded)
@@ -105,7 +106,7 @@ endif()
 
 # Architecture flags
 
-add_link_options(-Wl,--entry=__start)
+# add_link_options(-Wl,--entry=__start)
 add_link_options(-nostdlib)
 add_compile_options(-fno-common -Wall -Wshadow -Wundef -nostdlib)
 
