@@ -271,6 +271,7 @@
 "shutdown","sys/socket.h","defined(CONFIG_NET)","int","int","int"
 "sigaddset","signal.h","","int","FAR sigset_t *","int"
 "sigdelset","signal.h","","int","FAR sigset_t *","int"
+"sigwaitinfo","signal.h","","int","FAR sigset_t *","FAR struct siginfo *"
 "sigemptyset","signal.h","","int","FAR sigset_t *"
 "sigfillset","signal.h","","int","FAR sigset_t *"
 "sigismember","signal.h","","int","FAR const sigset_t *","int"

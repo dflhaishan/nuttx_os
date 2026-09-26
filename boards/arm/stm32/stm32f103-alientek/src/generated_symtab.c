@@ -590,6 +590,7 @@ const struct symtab_s g_symtab[] =
 #endif
   { "sigaddset", (FAR const void *)sigaddset },
   { "sigdelset", (FAR const void *)sigdelset },
+  { "sigwaitinfo", (FAR const void *)sigwaitinfo },
   { "sigemptyset", (FAR const void *)sigemptyset },
   { "sigfillset", (FAR const void *)sigfillset },
   { "sigismember", (FAR const void *)sigismember },
