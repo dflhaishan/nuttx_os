@@ -50,6 +50,7 @@
 #include <syslog.h>
 #include <sys/socket.h>
 #include <sys/utsname.h>
+#include <mqueue.h>
 
 const struct symtab_s g_symtab[] =
 {
@@ -580,6 +581,8 @@ const struct symtab_s g_symtab[] =
   { "sched_get_priority_min", (FAR const void *)sched_get_priority_min },
   { "sem_getvalue", (FAR const void *)sem_getvalue },
   { "sem_init", (FAR const void *)sem_init },
+  { "sem_wait", (FAR const void *)sem_wait },
+  { "sem_post", (FAR const void *)sem_post },
 #if defined(CONFIG_LIBC_LOCALE)
   { "setlocale", (FAR const void *)setlocale },
 #endif
@@ -760,7 +763,17 @@ const struct symtab_s g_symtab[] =
   { "wmemcpy", (FAR const void *)wmemcpy },
   { "wmemmove", (FAR const void *)wmemmove },
   { "wmemset", (FAR const void *)wmemset },
-  { "writev", (FAR const void *)writev }
+  { "writev", (FAR const void *)writev },
+  { "mq_open", (FAR const void *)mq_open },
+  { "mq_close", (FAR const void *)mq_close },
+  { "mq_unlink", (FAR const void *)mq_unlink },
+  { "mq_send", (FAR const void *)mq_send },
+  { "mq_timedsend", (FAR const void *)mq_timedsend },
+  { "mq_receive", (FAR const void *)mq_receive },
+  { "mq_timedreceive", (FAR const void *)mq_timedreceive },
+  { "mq_notify", (FAR const void *)mq_notify },
+  { "mq_setattr", (FAR const void *)mq_setattr },
+  { "mq_getattr", (FAR const void *)mq_getattr }
 };
 
 #define NSYMBOLS (sizeof(g_symtab) / sizeof (struct symtab_s))
