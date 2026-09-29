@@ -32,6 +32,7 @@
 #include <stdint.h>
 
 #include <arch/chip/chip.h>
+#include "stm32.h"
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -228,6 +229,15 @@
 #define GPIO_VS1053_DREQ    (GPIO_INPUT|GPIO_CNF_INPULLUP|GPIO_MODE_INPUT|\
                            GPIO_EXTI|GPIO_PORTC|GPIO_PIN13)
 #define GPIO_VS1053_DREQ_IRQ  STM32_IRQ_EXTI1510
+
+/* Goodix GT917S Touch Panel Interrupt at PF10 */
+
+#define CTP_INT (GPIO_INPUT|GPIO_CNF_INPULLDWN|GPIO_MODE_INPUT|\
+                           GPIO_EXTI|GPIO_PORTF|GPIO_PIN10)
+#define CTP_IRQ STM32_IRQ_EXTI1510
+/* I2C Address for Touch Panel */
+
+#define CTP_I2C_ADDR 0x5d
 
 /****************************************************************************
  * Public Function Prototypes
@@ -469,6 +479,10 @@ void stm32_deselectlcd(void);
 
 #ifdef CONFIG_AUDIO_VS1053
 int stm32_vs1053initialize(void);
+#endif
+
+#ifdef CONFIG_LCD_DEV
+int touch_panel_register(const char *devpath, struct i2c_master_s *i2c);
 #endif
 
 #endif /* __ASSEMBLY__ */

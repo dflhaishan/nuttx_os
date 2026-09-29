@@ -65,6 +65,7 @@
 #include "arm_internal.h"
 #include "stm32.h"
 #include "stm32f103_alientek.h"
+#include <nuttx/input/gt9xx.h>
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -180,6 +181,16 @@ static int stm32f103_setcontrast(struct lcd_dev_s *dev,
 /* Initialization */
 
 static inline void stm32f103_lcdinitialize(void);
+
+#ifdef CONFIG_INPUT_GT9XX
+/* LCD touch panel gt9147*/
+static int gt9xx_irq_attach(const struct gt9xx_board_s *state,
+                                      xcpt_t isr, void *arg);
+static void gt9xx_irq_enable(const struct gt9xx_board_s *state,
+                                       bool enable);
+static int gt9xx_set_power(const struct gt9xx_board_s *state,
+                                     bool on);
+#endif
 
 /****************************************************************************
  * Private Data
@@ -374,6 +385,27 @@ const lcd_cmd_t lcd_cmd[] =
     //16-bit/pixel
     {0x3A00, 0x55},   
 };
+
+#ifdef CONFIG_INPUT_GT9XX
+/* Callback for Board-Specific Operations */
+struct stm32_gt9xx_lower_s
+{
+    const struct gt9xx_board_s lower;
+    xcpt_t                     handler;
+    void*                      arg;
+};
+
+static struct stm32_gt9xx_lower_s g_gt9xx_lower =
+{
+    .lower = {
+        .irq_attach = gt9xx_irq_attach,
+        .irq_enable = gt9xx_irq_enable,
+        .set_power  = gt9xx_set_power
+    },
+    .handler = NULL,
+    .arg     = NULL,
+};
+#endif
 
 /****************************************************************************
  * Private Functions
@@ -809,4 +841,149 @@ static void stm32f103_lcdclear(uint16_t color)
     {
       LCD->value = color;
     }
+}
+
+#ifdef CONFIG_INPUT_GT9XX
+/****************************************************************************
+ * Name: gt9xx_irq_attach
+ *
+ * Description:
+ *   Attach the Interrupt Handler for Touch Panel.
+ *
+ * Input Parameters:
+ *   state - Callback for Board-Specific Operations
+ *   isr   - Interrupt Handler
+ *   arg   - Argument for Interrupt Handler
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
+
+static int gt9xx_irq_attach(const struct gt9xx_board_s *state,
+                                      xcpt_t isr, void *arg)
+{
+  iinfo("\n");
+  DEBUGASSERT(state != NULL && isr != NULL && arg != NULL);
+
+  struct stm32_gt9xx_lower_s *priv = (struct stm32_gt9xx_lower_s *)state;
+
+  priv->handler = isr;
+  priv->arg     = arg;
+
+  return 0;
+}
+
+/****************************************************************************
+ * Name: gt9xx_irq_enable
+ *
+ * Description:
+ *   Enable or disable Interrupts for the Touch Panel.
+ *
+ * Input Parameters:
+ *   state  - Callback for Board-Specific Operations
+ *   enable - True to enable interrupts; False to disable interrupts
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
+
+static void gt9xx_irq_enable(const struct gt9xx_board_s *state,
+                                       bool enable)
+{
+  int ret;
+
+  iinfo("enable=%d\n", enable);
+  DEBUGASSERT(state != NULL);
+
+  struct stm32_gt9xx_lower_s *priv = (struct stm32_gt9xx_lower_s *)state;
+
+  if (enable)
+    {
+      /* Configure the Touch Panel Interrupt */
+
+      ret = stm32_gpiosetevent(CTP_INT, true, false, false,
+                     priv->handler, priv->arg);
+      if (ret < 0)
+        {
+          ierr("Configure Touch Panel Interrupt failed: %d\n", ret);
+          return;
+        }
+    }
+  else
+    {
+      /* Disable the Touch Panel Interrupt */
+
+      ret = stm32_gpiosetevent(CTP_INT, false, false, false,
+                     NULL, NULL);
+      if (ret < 0)
+        {
+          ierr("Disable Touch Panel Interrupt failed: %d\n", ret);
+          return;
+        }
+    }
+}
+
+/****************************************************************************
+ * Name: gt9xx_set_power
+ *
+ * Description:
+ *   Power on or off the Touch Panel.
+ *
+ * Input Parameters:
+ *   state - Callback for Board-Specific Operations
+ *   on    - True to power on; False to power off
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
+
+static int gt9xx_set_power(const struct gt9xx_board_s *state,
+                                     bool on)
+{
+  /* Assume that Touch Panel is already powered on by pmic_init() */
+
+  iinfo("on=%d\n", on);
+  return 0;
+}
+#endif
+
+/****************************************************************************
+ * Public Functions
+ ****************************************************************************/
+
+/****************************************************************************
+ * Name: touch_panel_register
+ *
+ * Description:
+ *   Register the driver for Goodix GT9XX Touch Panel.  Attach the
+ *   Interrupt Handler for the Touch Panel and disable Touch Interrupts.
+ *
+ * Input Parameters:
+ *   devpath - Device Path (e.g. "/dev/input0")
+ *   i2c     - I2C Bus
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
+
+int touch_panel_register(const char *devpath,
+                                   struct i2c_master_s *i2c)
+{
+  int ret = 0;
+
+  iinfo("devpath=%s\n", devpath);
+  DEBUGASSERT(devpath != NULL && i2c != NULL);
+#ifdef CONFIG_INPUT_GT9XX
+  ret = gt9xx_register(devpath, i2c, CTP_I2C_ADDR, &g_gt9xx_lower.lower);
+  if (ret < 0)
+    {
+      ierr("Register Touch Input GT9xx failed: %d\n", ret);
+      return ret;
+    }
+#endif
+  return ret;
 }

@@ -191,6 +191,23 @@
 #endif
 
 /****************************************************************************
+ * Private Data
+ ****************************************************************************/
+
+#ifdef HAVE_SENSORS_DEVICE
+static int g_sensor_devno;
+#endif
+
+#ifdef CONFIG_LCD_DEV
+#define LCD_TOUCH_PANEL_PATH "/dev/input0"
+static struct i2c_master_s *lcd_touch_panel_i2c;
+#endif
+
+/****************************************************************************
+ * Public Functions
+ ****************************************************************************/
+
+ /****************************************************************************
  * Name: stm32_i2c_register
  *
  * Description:
@@ -240,24 +257,14 @@ static void stm32_i2c_bitbang_register(int bus)
     {
       syslog(LOG_ERR, "Failed to register I2C%d driver: %d\n", bus, ret);
     }
+
+  lcd_touch_panel_i2c = i2c;
 }
 #endif // CONFIG_STM32_I2C_BITBANG
 
 #endif // CONFIG_I2C_BITBANG
 
 #endif // CONFIG_I2C_DRIVER
-
-/****************************************************************************
- * Private Data
- ****************************************************************************/
-
-#ifdef HAVE_SENSORS_DEVICE
-static int g_sensor_devno;
-#endif
-
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
 
 /****************************************************************************
  * Name: stm32_bringup
@@ -628,6 +635,7 @@ int stm32_bringup(void)
     {
       syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
     }
+  ret = touch_panel_register(LCD_TOUCH_PANEL_PATH, lcd_touch_panel_i2c);
 #endif
 
 #ifdef CONFIG_AUDIO
