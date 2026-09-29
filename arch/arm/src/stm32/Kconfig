@@ -10767,6 +10767,25 @@ config STM32_I2C_SLAVE_RETRANSFER
 
 endmenu
 
+config STM32_I2C_BITBANG
+	bool "I2C Bitbang"
+	default n
+	---help---
+		Software implemented I2C peripheral with GPIOs. Suggested to use if I2C peripherals are already in use.
+
+if STM32_I2C_BITBANG
+
+choice STM32_I2C_BITBANG_MODE
+	prompt "I2C Bitbang Mode"
+	default STM32_I2C_BITBANG_MASTER_MODE
+endchoice
+
+config STM32_I2C_BITBANG_DEVNUM
+	int "I2C Bitbang dev number(> 3)"
+	default 4
+
+endif # STM32_I2C_BITBANG
+
 menu "SDIO Configuration"
 	depends on STM32_SDIO
 

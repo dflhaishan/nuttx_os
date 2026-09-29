@@ -147,6 +147,9 @@
 #ifdef CONFIG_I2C_DRIVER
 #include <nuttx/i2c/i2c_master.h>
 #include "stm32_i2c.h"
+#ifdef CONFIG_I2C_BITBANG
+#include "stm32_i2c_bitbang.h"
+#endif
 #endif
 
 #ifdef CONFIG_LCD_DEV
@@ -216,7 +219,33 @@ static void stm32_i2c_register(int bus)
         }
     }
 }
-#endif
+
+#ifdef CONFIG_I2C_BITBANG
+
+#ifdef CONFIG_STM32_I2C_BITBANG
+static void stm32_i2c_bitbang_register(int bus)
+{
+  struct i2c_master_s *i2c;
+  int ret;
+
+  i2c = stm32_i2cbus_bitbang_initialize();
+  if (i2c == NULL)
+    {
+      syslog(LOG_ERR, "Failed to get I2C%d interface\n", bus);
+    }
+
+
+  ret = i2c_register(i2c, bus);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "Failed to register I2C%d driver: %d\n", bus, ret);
+    }
+}
+#endif // CONFIG_STM32_I2C_BITBANG
+
+#endif // CONFIG_I2C_BITBANG
+
+#endif // CONFIG_I2C_DRIVER
 
 /****************************************************************************
  * Private Data
@@ -280,6 +309,11 @@ int stm32_bringup(void)
   #endif
   #ifdef CONFIG_STM32_I2C3
     stm32_i2c_register(3);
+  #endif
+  #ifdef CONFIG_I2C_BITBANG
+    #ifdef  CONFIG_STM32_I2C_BITBANG
+      stm32_i2c_bitbang_register(CONFIG_STM32_I2C_BITBANG_DEVNUM);
+    #endif
   #endif
 #endif
 

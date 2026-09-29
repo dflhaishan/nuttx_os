@@ -270,4 +270,8 @@ if(CONFIG_STM32_CORDIC)
   list(APPEND SRCS stm32_cordic.c)
 endif()
 
+if(CONFIG_STM32_I2C_BITBANG)
+  list(APPEND SRCS stm32_i2c_bitbang.c)
+endif()
+
 target_sources(arch PRIVATE ${SRCS})
