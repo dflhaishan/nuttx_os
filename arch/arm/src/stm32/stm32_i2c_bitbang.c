@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include <nuttx/config.h>
-
+#include <debug.h>
 #ifdef CONFIG_STM32_I2C_BITBANG
 #include <assert.h>
 #include <nuttx/i2c/i2c_master.h>
@@ -34,12 +34,12 @@
 #include <arch/board/board.h>
 #include "chip.h"
 
-#define I2C_BITBANG_SCLPIN  (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+#define I2C_BITBANG_SCLPIN  (GPIO_OUTPUT|GPIO_CNF_OUTOD|GPIO_MODE_50MHz|\
                              GPIO_OUTPUT_SET|GPIO_PORTB|GPIO_PIN1)
-#define I2C_BITBANG_SDAPIN  (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+#define I2C_BITBANG_SDAPIN  (GPIO_OUTPUT|GPIO_CNF_OUTOD|GPIO_MODE_50MHz|\
                              GPIO_OUTPUT_SET|GPIO_PORTF|GPIO_PIN9)
-
-
+#define I2C_BITBANG_RSTPIN  (GPIO_OUTPUT|GPIO_CNF_OUTPP|GPIO_MODE_50MHz|\
+                             GPIO_OUTPUT_SET|GPIO_PORTF|GPIO_PIN11)
 // #define STRINGIFY(x) #x
 // #define TOSTRING(x) STRINGIFY(x)
 
@@ -68,6 +68,7 @@ struct stm32_i2c_bitbang_dev_s
   struct i2c_bitbang_lower_dev_s lower;
   int sda_pin;
   int scl_pin;
+  int rst_pin;
 };
 
 /****************************************************************************
@@ -126,7 +127,7 @@ static void stm32_i2c_bitbang_init(struct i2c_bitbang_lower_dev_s *lower)
 
   stm32_configgpio(dev->scl_pin);
   stm32_configgpio(dev->sda_pin);
-
+  stm32_configgpio(dev->rst_pin);
 }
 
 /****************************************************************************
@@ -258,6 +259,7 @@ struct i2c_master_s *stm32_i2cbus_bitbang_initialize(void)
   dev->lower.priv = dev;
   dev->scl_pin = I2C_BITBANG_SCLPIN;
   dev->sda_pin = I2C_BITBANG_SDAPIN;
+  dev->rst_pin = I2C_BITBANG_RSTPIN;
 
   return i2c_bitbang_initialize(&dev->lower);
 }
