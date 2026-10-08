@@ -237,42 +237,29 @@ static int gt9xx_i2c_write(FAR struct gt9xx_dev_s *dev,
 {
   int ret;
 
-  /* Send the Register Address, MSB first */
+  /*
+   * GT9XX register writes must be sent as one continuous write sequence:
+   * register address (2 bytes) followed by register value (1 byte).  Do
+   * this as a single I2C transfer instead of splitting the write into two
+   * messages with I2C_M_NOSTART because the bitbang I2C implementation does
+   * not reliably preserve the intended transaction boundary for this pattern.
+   */
 
-  uint8_t regbuf[2] =
+  uint8_t regbuf[3] =
   {
     reg >> 8,   /* First Byte: MSB */
-    reg & 0xff  /* Second Byte: LSB */
+    reg & 0xff, /* Second Byte: LSB */
+    val         /* Third Byte: Value */
   };
 
-  /* Send the Register Value */
-
-  uint8_t buf[1] =
-  {
-    val  /* Value to be written */
-  };
-
-  /* Compose the I2C Messages */
-
-  struct i2c_msg_s msgv[2] =
+  struct i2c_msg_s msgv[1] =
   {
     {
-      /* Send the I2C Register Address */
-
       .frequency = CONFIG_INPUT_GT9XX_I2C_FREQUENCY,
       .addr      = dev->addr,
       .flags     = 0,
       .buffer    = regbuf,
       .length    = sizeof(regbuf)
-    },
-    {
-      /* Send the I2C Register Value */
-
-      .frequency = CONFIG_INPUT_GT9XX_I2C_FREQUENCY,
-      .addr      = dev->addr,
-      .flags     = I2C_M_NOSTART,
-      .buffer    = buf,
-      .length    = sizeof(buf)
     }
   };
 
