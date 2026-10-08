@@ -232,7 +232,7 @@
 
 /* Goodix GT917S Touch Panel Interrupt at PF10 */
 
-#define CTP_INT (GPIO_INPUT|GPIO_CNF_INPULLDWN|GPIO_MODE_INPUT|\
+#define CTP_INT (GPIO_INPUT|GPIO_CNF_INFLOAT|GPIO_MODE_INPUT|\
                            GPIO_EXTI|GPIO_PORTF|GPIO_PIN10)
 #define CTP_IRQ STM32_IRQ_EXTI1510
 /* I2C Address for Touch Panel */

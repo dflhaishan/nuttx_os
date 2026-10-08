@@ -903,7 +903,7 @@ static void gt9xx_irq_enable(const struct gt9xx_board_s *state,
     {
       /* Configure the Touch Panel Interrupt */
 
-      ret = stm32_gpiosetevent(CTP_INT, true, false, false,
+      ret = stm32_gpiosetevent(CTP_INT, false, true, false,
                      priv->handler, priv->arg);
       if (ret < 0)
         {
