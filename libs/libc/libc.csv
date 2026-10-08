@@ -416,3 +416,4 @@
 "mq_notify","mqueue.h","","int","mqd_t","FAR const struct sigevent *"
 "mq_setattr","mqueue.h","","int","mqd_t","FAR const struct mq_attr *","FAR struct mq_attr *"
 "mq_getattr","mqueue.h","","int","mqd_t","FAR struct mq_attr *"
+"poll","poll.h","","int","FAR struct pollfd *","nfds_t","int"

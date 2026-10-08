@@ -51,6 +51,7 @@
 #include <sys/socket.h>
 #include <sys/utsname.h>
 #include <mqueue.h>
+#include <poll.h>
 
 const struct symtab_s g_symtab[] =
 {
@@ -773,7 +774,8 @@ const struct symtab_s g_symtab[] =
   { "mq_timedreceive", (FAR const void *)mq_timedreceive },
   { "mq_notify", (FAR const void *)mq_notify },
   { "mq_setattr", (FAR const void *)mq_setattr },
-  { "mq_getattr", (FAR const void *)mq_getattr }
+  { "mq_getattr", (FAR const void *)mq_getattr },
+  { "poll", (FAR const void *)poll }
 };
 
 #define NSYMBOLS (sizeof(g_symtab) / sizeof (struct symtab_s))
