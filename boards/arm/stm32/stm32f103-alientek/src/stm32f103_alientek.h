@@ -237,7 +237,7 @@
 #define CTP_IRQ STM32_IRQ_EXTI1510
 /* I2C Address for Touch Panel */
 
-#define CTP_I2C_ADDR 0x5d
+#define CTP_I2C_ADDR 0x14
 
 /****************************************************************************
  * Public Function Prototypes
