@@ -66,6 +66,7 @@
 #include "stm32.h"
 #include "stm32f103_alientek.h"
 #include <nuttx/input/gt9xx.h>
+#include "stm32_ssd1306.h"
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -800,10 +801,23 @@ int board_lcd_initialize(void)
  *
  ****************************************************************************/
 
-struct lcd_dev_s *board_lcd_getdev(int lcddev)
+struct lcd_dev_s *board_lcd_getdev(int devno)
 {
-  DEBUGASSERT(lcddev == 0);
-  return &g_lcddev.dev;
+  struct lcd_dev_s * lcddev = NULL;
+  DEBUGASSERT(devno < 2);
+  switch (devno) {
+    case 0:
+        lcddev = &g_lcddev.dev;
+        break;
+    case 1:
+#ifdef CONFIG_LCD_SSD1306_I2C
+        lcddev = board_ssd1306_getdev();
+#endif
+        break;
+    default:
+        break;
+  }
+  return lcddev;
 }
 
 /****************************************************************************

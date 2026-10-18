@@ -636,6 +636,15 @@ int stm32_bringup(void)
       syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
     }
   ret = touch_panel_register(LCD_TOUCH_PANEL_PATH, lcd_touch_panel_i2c);
+
+#ifdef CONFIG_LCD_SSD1306_I2C
+  ret = board_lcd_ssd1306_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: board_lcd_ssd1306_initialize() failed: %d\n", ret);
+    }
+  ret = lcddev_register(1);
+#endif
 #endif
 
 #ifdef CONFIG_AUDIO

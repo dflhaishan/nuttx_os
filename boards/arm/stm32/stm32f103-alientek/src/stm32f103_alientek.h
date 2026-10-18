@@ -485,5 +485,9 @@ int stm32_vs1053initialize(void);
 int touch_panel_register(const char *devpath, struct i2c_master_s *i2c);
 #endif
 
+#ifdef CONFIG_LCD_SSD1306_I2C
+int board_lcd_ssd1306_initialize(void);
+#endif
+
 #endif /* __ASSEMBLY__ */
 #endif /* __BOARDS_ARM_STM32_STM32F103_MINIMUM_SRC_STM32F103_ALIENTEK_H */

@@ -41,7 +41,7 @@
  * Pre-processor Definitions
  ****************************************************************************/
 
-#define OLED_I2C_PORT         1 /* OLED display connected to I2C1 */
+#define OLED_I2C_PORT         2 /* OLED display connected to I2C2 */
 
 /****************************************************************************
  * Private Data
@@ -52,10 +52,10 @@
  ****************************************************************************/
 
 /****************************************************************************
- * Name: board_lcd_initialize
+ * Name: board_lcd_ssd1306_initialize
  ****************************************************************************/
 
-int board_lcd_initialize(void)
+int board_lcd_ssd1306_initialize(void)
 {
   int ret;
 
@@ -77,16 +77,17 @@ int board_lcd_initialize(void)
  * Name: board_lcd_getdev
  ****************************************************************************/
 
-struct lcd_dev_s *board_lcd_getdev(int devno)
-{
-  return board_ssd1306_getdev();
-}
+// struct lcd_dev_s *board_lcd_getdev(int devno)
+// {
+//   DEBUGASSERT(devno == 1);
+//   return board_ssd1306_getdev();
+// }
 
 /****************************************************************************
  * Name: board_lcd_uninitialize
  ****************************************************************************/
 
-void board_lcd_uninitialize(void)
-{
-  /* TO-FIX */
-}
+// void board_lcd_uninitialize(void)
+// {
+//   /* TO-FIX */
+// }
