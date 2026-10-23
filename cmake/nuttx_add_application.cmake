@@ -142,8 +142,8 @@ function(nuttx_add_application)
         target_link_options(
           ${TARGET} PRIVATE
           $<GENEX_EVAL:$<TARGET_PROPERTY:nuttx,NUTTX_ELF_APP_LINK_OPTIONS>>)
-        add_dependencies(${TARGET} nuttx)
-        target_add_symtab(${TARGET})
+        # add_dependencies(${TARGET} nuttx)
+        # target_add_symtab(${TARGET})
       endif()
 
       # easy access to final ELF, regardless of how it was created
