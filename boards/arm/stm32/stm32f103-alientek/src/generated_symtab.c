@@ -49,6 +49,7 @@
 #include <wctype.h>
 #include <signal.h>
 #include <nuttx/tls.h>
+#include <lvgl/lvgl.h>
 #include <malloc.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -522,6 +523,21 @@ const struct symtab_s g_symtab[] =
   { "lseek", (FAR const void *)lseek },
   { "lstat", (FAR const void *)lstat },
   { "lutimens", (FAR const void *)lutimens },
+  { "lv_button_create", (FAR const void *)lv_button_create },
+  { "lv_event_get_code", (FAR const void *)lv_event_get_code },
+  { "lv_init", (FAR const void *)lv_init },
+  { "lv_is_initialized", (FAR const void *)lv_is_initialized },
+  { "lv_label_create", (FAR const void *)lv_label_create },
+  { "lv_label_set_text", (FAR const void *)lv_label_set_text },
+  { "lv_log_add", (FAR const void *)lv_log_add },
+  { "lv_nuttx_dsc_init", (FAR const void *)lv_nuttx_dsc_init },
+  { "lv_nuttx_init", (FAR const void *)lv_nuttx_init },
+  { "lv_obj_add_event_cb", (FAR const void *)lv_obj_add_event_cb },
+  { "lv_obj_align", (FAR const void *)lv_obj_align },
+  { "lv_obj_center", (FAR const void *)lv_obj_center },
+  { "lv_obj_remove_flag", (FAR const void *)lv_obj_remove_flag },
+  { "lv_screen_active", (FAR const void *)lv_screen_active },
+  { "lv_timer_handler", (FAR const void *)lv_timer_handler },
   { "mallinfo", (FAR const void *)mallinfo },
   { "malloc_size", (FAR const void *)malloc_size },
   { "malloc", (FAR const void *)malloc },
