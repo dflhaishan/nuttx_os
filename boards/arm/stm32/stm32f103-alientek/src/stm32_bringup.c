@@ -350,7 +350,7 @@ int stm32_bringup(void)
   ret = stm32_mmcsd_initialize(MMCSD_MINOR);
   if (ret < 0)
     {
-      syslog(LOG_ERR, "Failed to initialize SD slot %d: %d\n", ret);
+      syslog(LOG_ERR, "Failed to initialize SD slot %d\n", ret);
       return ret;
     }
 #endif

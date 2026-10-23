@@ -41,10 +41,6 @@
  * Pre-processor Definitions
  ****************************************************************************/
 
-#ifndef CONFIG_STM32_SPI1
-#  error "SD driver requires CONFIG_STM32_SPI1 to be enabled"
-#endif
-
 #ifdef CONFIG_DISABLE_MOUNTPOINT
 #  error "SD driver requires CONFIG_DISABLE_MOUNTPOINT to be disabled"
 #endif
@@ -52,9 +48,6 @@
 /****************************************************************************
  * Private Definitions
  ****************************************************************************/
-
-static const int SD_SPI_PORT = 1; /* SD is connected to SPI1 port */
-static const int SD_SLOT_NO  = 0; /* There is only one SD slot */
 
 /****************************************************************************
  * Private Functions
@@ -69,20 +62,6 @@ static const int SD_SLOT_NO  = 0; /* There is only one SD slot */
  ****************************************************************************/
 
 /****************************************************************************
- * Name: stm32_spi1register
- *
- * Description:
- *   Registers media change callback
- ****************************************************************************/
-
-int stm32_spi1register(struct spi_dev_s *dev, spi_mediachange_t callback,
-                       void *arg)
-{
-  spiinfo("INFO: Registering spi1 device\n");
-  return OK;
-}
-
-/****************************************************************************
  * Name: stm32_mmcsd_initialize
  *
  * Description:
@@ -91,26 +70,27 @@ int stm32_spi1register(struct spi_dev_s *dev, spi_mediachange_t callback,
 
 int stm32_mmcsd_initialize(int minor)
 {
-  struct spi_dev_s *spi;
-  int rv;
+  struct sdio_dev_s *sdio;
+  int ret;
 
   mcinfo("INFO: Initializing mmcsd card\n");
 
-  spi = stm32_spibus_initialize(SD_SPI_PORT);
-  if (spi == NULL)
+  sdio = sdio_initialize(minor);
+  if (sdio == NULL)
     {
-      mcerr("ERROR: Failed to initialize SPI port %d\n", SD_SPI_PORT);
+      mcerr("ERROR: Failed to initialize SDIO slot %d\n", minor);
       return -ENODEV;
     }
 
-  rv = mmcsd_spislotinitialize(minor, SD_SLOT_NO, spi);
-  if (rv < 0)
+  ret = mmcsd_slotinitialize(minor, sdio);
+  if (ret != OK)
     {
-      mcerr("ERROR: Failed to bind SPI port %d to SD slot %d\n",
-            SD_SPI_PORT, SD_SLOT_NO);
-      return rv;
+      mcerr("ERROR: Failed to bind SDIO to the MMC/SD driver: %d\n",
+            ret);
+      return ret;
     }
 
-  spiinfo("INFO: mmcsd card has been initialized successfully\n");
+  sdio_mediachange(sdio, true);
+  mcinfo("INFO: mmcsd card has been initialized successfully\n");
   return OK;
 }

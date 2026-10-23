@@ -28,3 +28,4 @@
 
 /* echo "rcS file is called!" */
 adbd &
+mount -t vfat /dev/mmcsd0 /mnt/sd
