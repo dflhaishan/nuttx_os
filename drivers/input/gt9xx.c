@@ -538,6 +538,12 @@ static ssize_t gt9xx_read(FAR struct file *filep, FAR char *buffer,
           iinfo("skip duplicate x=%d, y=%d\n", priv->x, priv->y);
         }
 
+      if (sample.npoints == 0)
+        {
+          nxmutex_unlock(&priv->devlock);
+          return -EAGAIN;
+        }
+
       /* Return the Touch Point */
 
       memcpy(buffer, &sample, sizeof(sample));
